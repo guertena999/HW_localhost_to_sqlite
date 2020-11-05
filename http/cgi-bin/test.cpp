@@ -29,7 +29,6 @@ int main ()
 {
    Cgicc formData;
    sqlite3 *db;
-   string as;
    char *zErrMsg = 0;
    int  rc;
    char* sql;
@@ -51,20 +50,22 @@ int main ()
    }
 
    /*===================================接收表單=============================================*/
-   form_iterator fi = formData.getElement("sql_text");   //這邊 html我用POST以標準輸出傳送資料,GET是用網址後夾帶?='變數'來傳資料
-   if( !fi->isEmpty() && fi != (*formData).end()) {
-      cout << "<p2>語法為：" << **fi <<"\n</p2>"<< endl;
+   form_iterator ud = formData.getElement("name");
+   string comm = "SELECT 員工名稱,員工電話 FROM compeny WHERE 員工名稱=";
+   string cod = **ud;
+   comm = comm+'"'+cod+'"'+';';
+   if( !ud->isEmpty() && ud != (*formData).end()) {
+      cout << "<p2>查詢結果為：" <<"</p2>"<< endl;
       cout <<"<hr>";
-      as=**fi;
    }else{
       cout << "No text entered for first name" << endl;
    }
    /*=================================字符轉換===============================================*/
-   char * writable = new char[as.size() + 1];
-   copy(as.begin(), as.end(), writable);
-   writable[as.size()] = '\0';
+   char * m = new char[comm.size() + 1];
+   copy(comm.begin(), comm.end(), m);
+   m[comm.size()] = '\0';
    /*==================================執行查詢和呼叫========================================*/
-   sql = writable;
+   sql = m;
    rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
    if( rc != SQLITE_OK ){
       fprintf(stderr, "SQL error: %s\n", zErrMsg);
