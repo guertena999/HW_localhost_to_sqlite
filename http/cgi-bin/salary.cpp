@@ -50,11 +50,13 @@ int main ()
    }
 
    /*===================================接收表單=============================================*/
-   form_iterator ud = formData.getElement("name");
+   form_iterator ud = formData.getElement("up_down");
+   form_iterator sy = formData.getElement("salary");
 
-   string comm = "select co_worker.name,salary_list.office,office_com.bonuses FROM co_worker INNER JOIN salary_list ON co_worker.name=salary_list.name INNER JOIN office_com  ON salary_list.office=office_com.office where office_com.bonuses='Y' and co_worker.name=";
+   string comm = "SELECT co_worker.name,salary_list.salary FROM co_worker inner join salary_list on co_worker.name=salary_list.name  WHERE salary_list.salary>";
    string cod = **ud;
-   comm = comm+"'"+cod+"'"+';';
+   string codd= **sy;
+   comm = comm+codd+" order by salary "+cod+';';
 
    if( !ud->isEmpty() && ud != (*formData).end()) {
       cout << "<p2>查詢結果為：" <<"</p2>"<< endl;
